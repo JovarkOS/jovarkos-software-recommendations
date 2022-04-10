@@ -1,1 +1,1 @@
-#nothing yet
+#define BUTTON_PADDING 3

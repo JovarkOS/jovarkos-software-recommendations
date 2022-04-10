@@ -1,9 +1,11 @@
 #include <gtk/gtk.h>
+#include "main.h"
 static void activate (GtkApplication *app, gpointer user_data)
 {
 	  GtkWidget *window;
 	  GtkWidget *utilities_category_button;
 	  GtkWidget *games_category_button;
+	  GtkWidget *applications_category_button;
 	  GtkWidget *box;
 
 	  box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
@@ -16,10 +18,11 @@ static void activate (GtkApplication *app, gpointer user_data)
 	  //set buttons
 	  utilities_category_button = gtk_button_new_with_label ("Utilities");
 	  games_category_button = gtk_button_new_with_label("Games");
-
+	  applications_category_button = gtk_button_new_with_label("Applications");
 	  //pack them into a box
-	  gtk_box_pack_start(GTK_BOX(box),utilities_category_button, 1, 1, 1);
-	  gtk_box_pack_start(GTK_BOX(box),games_category_button, 1, 1, 1);
+	  gtk_box_pack_start(GTK_BOX(box),utilities_category_button, 1, 1, BUTTON_PADDING);
+	  gtk_box_pack_start(GTK_BOX(box),games_category_button, 1, 1, BUTTON_PADDING);
+	  gtk_box_pack_start(GTK_BOX(box),applications_category_button, 1, 1, BUTTON_PADDING);
 	  gtk_box_set_spacing(GTK_BOX(box), 2);
 	  //put the box into the window
 	  gtk_container_add (GTK_CONTAINER (window), box);
