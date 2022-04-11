@@ -2,7 +2,7 @@
 An application to present recommmended software to JovarkOS users.
 
 
-Please refer to the list of software in `SOFTWARE.md`. 
+Please refer to the list of software in `SOFTWARE.ini`. 
 
 
 ## Requirements
