@@ -1,4 +1,4 @@
-# jovarkos-software-recommendations
+# Software Recommendations
 An application to present recommmended software to JovarkOS users.
 
 
