@@ -3,7 +3,7 @@
 GtkWidget *window;
 GtkWidget *category_buttons[CATEGORY_NUMBER];
 const char* category_names[] = {"Utilities", "Games", "Applications"};
-GtkWidget *box;
+GtkWidget *category_container;
 
 static void hide_buttons();
 static void on_button_click();

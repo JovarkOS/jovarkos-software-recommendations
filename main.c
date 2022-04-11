@@ -2,10 +2,7 @@
 #include "main.h"
 static void hide_buttons()
 {
-	for(int i=0; i< CATEGORY_NUMBER; i++)
-	{
-		gtk_widget_hide(category_buttons[i]);
-	}
+	gtk_widget_hide(category_container);
 }
 
 static void on_button_click(GtkWidget *widget, gpointer data)
@@ -15,25 +12,22 @@ static void on_button_click(GtkWidget *widget, gpointer data)
 
 static void activate (GtkApplication *app, gpointer user_data)
 {
-	 
-
-	  box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
-	 
+	  category_container  = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
 	  //prepare the window
 	  window = gtk_application_window_new (app);
 	  gtk_window_set_title (GTK_WINDOW (window), "Window");
 	  gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
+
+	  //make a new button for each category  and add each to the box
 	  for(int i = 0; i < CATEGORY_NUMBER; i++)
 	  {
-	  	category_buttons[i] = gtk_button_new_with_label(category_names[i]);
-	  	gtk_box_pack_start(GTK_BOX(box), category_buttons[i], 1, 1, BUTTON_PADDING);
-	  	g_signal_connect(category_buttons[i], "clicked", G_CALLBACK(on_button_click), NULL);
+		  	category_buttons[i] = gtk_button_new_with_label(category_names[i]);
+		  	gtk_box_pack_start(GTK_BOX(category_container), category_buttons[i], 1, 1, BUTTON_PADDING);
+		  	g_signal_connect(category_buttons[i], "clicked", G_CALLBACK(on_button_click), NULL);
 	  }
 	  
-	  gtk_box_set_spacing(GTK_BOX(box), 2);
-	  //put the box into the window
-	  gtk_container_add (GTK_CONTAINER (window), box);
-
+	  gtk_box_set_spacing(GTK_BOX(category_container), 2);
+	  gtk_container_add (GTK_CONTAINER (window), category_container);
 	  gtk_widget_show_all (GTK_WIDGET (window));
 }
 
