@@ -7,4 +7,3 @@ All contributors are welcome, but keep in mind that all final features will be r
  - Git commit messages should be descriptive, and under the 50 character limit. 
    - Good example: `Improve event handling logic of GTK buttons` (44 characters, descriptive of additions)
    - Bad example: `fix stuff with buttons` (22 characters, not helpful in retrospect)
- - 
