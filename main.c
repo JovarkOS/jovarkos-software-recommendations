@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include "main.h"
+
 static void hide_buttons()
 {
 	gtk_widget_hide(category_container);
@@ -7,18 +8,20 @@ static void hide_buttons()
 
 static void on_button_click(GtkWidget *widget, gpointer data)
 {
+	// Hide the buttons from the view 
 	hide_buttons();
 }
 
 static void activate (GtkApplication *app, gpointer user_data)
 {
 	  category_container  = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
-	  //prepare the window
+	  // prepare the window
 	  window = gtk_application_window_new (app);
-	  gtk_window_set_title (GTK_WINDOW (window), "Window");
+	  gtk_window_set_title (GTK_WINDOW (window), "JovarkOS Software Recommendations");
+	  gtk_window_set_icon_from_file(GTK_WINDOW(window), "assets/window-icon.png", NULL);
 	  gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
 
-	  //make a new button for each category  and add each to the box
+	  // make a new button for each category and add each to the box
 	  for(int i = 0; i < CATEGORY_NUMBER; i++)
 	  {
 		  	category_buttons[i] = gtk_button_new_with_label(category_names[i]);
