@@ -11,7 +11,7 @@ static void on_button_click(GtkWidget *widget, gpointer data)
 	// Hide the buttons from the view 
 	hide_buttons();
 	//todo: import a custom ui file and display it based on category
-	GtkBuilder* builder = gtk_builder_new_from_file("views/games.xml");
+	GtkBuilder* builder = gtk_builder_new_from_file("views/template.xml");
 	GObject* main_box = gtk_builder_get_object(builder, "box");
 	gtk_widget_show(GTK_WIDGET(main_box));
 }
