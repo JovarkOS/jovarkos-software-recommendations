@@ -8,6 +8,10 @@ static void hide_buttons()
 static void on_button_click(GtkWidget *widget, gpointer data)
 {
 	hide_buttons();
+	//todo: import a custom ui file and display it based on category
+	GtkBuilder* builder = gtk_builder_new_from_file("views/games.xml");
+	GObject* main_box = gtk_builder_get_object(builder, "box");
+	gtk_widget_show(GTK_WIDGET(main_box));
 }
 
 static void activate (GtkApplication *app, gpointer user_data)
