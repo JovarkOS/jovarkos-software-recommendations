@@ -1,0 +1,7 @@
+category_name=template
+[example_software]
+name=example
+image_source=assets/sample.png
+description=an example software
+package=example
+ 
