@@ -42,7 +42,7 @@ Category read_category_from_file(const char* file_name)
 				if(parse_mode == ID)
 				{	
 					
-					strcpy(to_return.software_list[software_count - 1].id, current_string); 
+					strncpy(to_return.software_list[software_count - 1].id, current_string, sizeof(to_return.software_list[0].id)); 
 					parse_mode=KEY;
 					current_string[0] = '\0'; 
 					
@@ -53,8 +53,8 @@ Category read_category_from_file(const char* file_name)
 			{
 				if(parse_mode == KEY)
 				{
+					strncpy(key_string, current_string, sizeof(key_string));
 					parse_mode=VALUE;
-					strcpy(key_string, current_string);
 					current_string[0] = '\0'; //yes this is how you 'erase' a string in c
 				}	
 				
@@ -65,13 +65,22 @@ Category read_category_from_file(const char* file_name)
 			 	// long if else chain because c doesn't support char* in switch statements, and hash mapping is too hard
 				if(strcmp(key_string, "name") == 0 && parse_mode == VALUE )
 				{ 	
-					strcpy(to_return.software_list[software_count - 1].name, current_string);						
+					strncpy(to_return.software_list[software_count - 1].name, current_string, sizeof(to_return.software_list[0].name));						
 				}
 				
 				else if(strcmp(key_string, "image_source") == 0 && parse_mode == VALUE)
 				{
-					strcpy(to_return.software_list[software_count - 1].image, current_string);
+					strncpy(to_return.software_list[software_count - 1].image, current_string, sizeof(to_return.software_list[0].image));
 				}
+				else if(strcmp(key_string, "description") == 0 && parse_mode == VALUE)
+				{
+					strncpy(to_return.software_list[software_count -1].description, current_string, sizeof(to_return.software_list[0].description));
+				}
+				else if(strcmp(key_string, "package") == 0 && parse_mode == VALUE)
+				{
+					strncpy(to_return.software_list[software_count -1].package, current_string, sizeof(to_return.software_list[0].package));
+				}
+				
 				current_string[0] = '\0';
 				parse_mode = KEY;
 				
@@ -83,11 +92,23 @@ Category read_category_from_file(const char* file_name)
 			} break; 
 		}			
 	} while(current_character != EOF);
+	to_return.software_count = software_count;
 	fclose(file);
 	return to_return;
 }
 
+char* build_ui_from_category(Category category)
+{
+	char xml_ui_definition[10000];
+	
+	for(int i=0; i < category.software_count; i++)
+	{
+				
+	}
+}
+
 int main()
 {
-		read_category_from_file("/home/null/jovarkos-software-recommendations/views/template.category");
+	Category c = read_category_from_file("/home/null/jovarkos-software-recommendations/views/template.category");
+	printf("%s\n", c.software_list[1].description);
 }

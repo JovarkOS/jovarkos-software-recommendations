@@ -1,7 +1,12 @@
-category_name=template
+
 [example_software]
 name=example
 image_source=assets/sample.png
 description=an example software
 package=example
- 
+
+[software2]
+name=another
+image_source=assets/another.png
+description=another example software 
+package=gcc
