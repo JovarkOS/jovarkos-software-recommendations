@@ -99,16 +99,22 @@ Category read_category_from_file(const char* file_name)
 
 char* build_ui_from_category(Category category)
 {
-	char xml_ui_definition[10000];
-	
+	char* xml_ui_definition;
+	xml_ui_definition = malloc(sizeof(char) * 10000);
+	strcat(xml_ui_definition, "<interface>");
 	for(int i=0; i < category.software_count; i++)
 	{
-				
+		strcat(xml_ui_definition, "<box id=");
+		strcat(xml_ui_definition, category.software_list[i].id);
+		strcat(xml_ui_definition, "> <property name='orientation'>vertical<property>");
 	}
+	strcat(xml_ui_definition, "</interface>");
+	return xml_ui_definition;
 }
 
 int main()
 {
 	Category c = read_category_from_file("/home/null/jovarkos-software-recommendations/views/template.category");
-	printf("%s\n", c.software_list[1].description);
+	char* xml = build_ui_from_category(c);
+	printf("%s", xml);
 }
