@@ -37,6 +37,7 @@
 *.hex
 jovarkos-software-recommendations
 build_ui
+test
 
 # Debug files
 *.dSYM/
