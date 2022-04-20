@@ -107,16 +107,29 @@ char *build_ui_from_category(Category category)
 	char* xml_ui_definition;
 	xml_ui_definition = malloc(sizeof(char) * 10000);
 	xml_ui_definition[0]= '\0';
-	strcat(xml_ui_definition, "<interface>  <object class=\"GtkBox\" id=\"main\">\n<property name=\"orientation\">vertical</property>\n<child>\n");
+	sprintf(xml_ui_definition, "\
+<interface>\n\
+ <object class=\"GtkBox\" id=\"main\">\n\
+  <property name=\"orientation\">vertical</property>\n\
+  <child>\n");
+	
 	for(int i=0; i < category.software_count; i++)
 	{
-		strcat(xml_ui_definition, "<object class=\"GtkBox\" id=\"");
-		strcat(xml_ui_definition, category.software_list[i].id);
-		strcat(xml_ui_definition, "\">\n<property name=\"orientation\">vertical<property>\n<child>\n   <object class=\"GtkText\"></object>\n</child>\n</object>\n");
+		char temp_buffer[1000];
+		sprintf(temp_buffer, "\
+    <object class=\"GtkBox\" id=\"%s\">\n\
+     <property name=\"orientation\">vertical</property>\n\
+     <child>\n\
+      <object class=\"GtkBox\"></object>\n\
+     </child>\n\
+    </object>\n", category.software_list[i].id);
+		strcat(xml_ui_definition, temp_buffer);	
 	
 	}
-	strcat(xml_ui_definition, "\n</child>\n</object>\n</interface>");
-	printf("xml ui def:\n %s\n", xml_ui_definition);
+	strcat(xml_ui_definition, "\
+  </child>\n\
+ </object>\n\
+</interface>");
+	printf("xml ui def:\n%s\n", xml_ui_definition);
 	return xml_ui_definition;
 }
-
