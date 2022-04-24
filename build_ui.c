@@ -106,13 +106,19 @@ char *build_ui_from_category(Category category)
 {
 	char* xml_ui_definition;
 	xml_ui_definition = malloc(sizeof(char) * 10000);
+	xml_ui_definition[0] = '\0';
+	printf("xml ui definition starts out as %s\n", xml_ui_definition);
 	strcat(xml_ui_definition, "<interface>");
 	for(int i=0; i < category.software_count; i++)
-	{
-		strcat(xml_ui_definition, "<box id=");
+	{	
+
+		//for maximum efficiency I'm trying to make as few of these calls as possible. This will result in long lines.
+		strcat(xml_ui_definition, "<object class='GtkBox' id=");
 		strcat(xml_ui_definition, category.software_list[i].id);
-		strcat(xml_ui_definition, "> <property name='orientation'>vertical<property>");
-	}
+		strcat(xml_ui_definition, "> <property name='orientation'>vertical</property><child><object class='GtkButton' id='button-");
+		strcat(xml_ui_definition, category.software_list[i].id);
+		strcat(xml_ui_definition,"'><property name='label'>Install</property></object>" );
+	}	
 	strcat(xml_ui_definition, "</interface>");
 	return xml_ui_definition;
 }
@@ -122,4 +128,5 @@ int main()
 	Category c = read_category_from_file("/home/null/jovarkos-software-recommendations/views/template.category");
 	char* xml = build_ui_from_category(c);
 	printf("%s", xml);
+	//I have no idea why, but this prints the full file before what I actually added to it
 }
