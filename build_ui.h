@@ -13,5 +13,6 @@ typedef struct {
 } Category;
 
 Category read_category_from_file(const char* fileName);
+char* build_ui_from_category(Category c);
 typedef enum { ID, KEY, VALUE, NONE } Mode;
 

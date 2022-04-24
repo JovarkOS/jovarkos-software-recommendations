@@ -107,26 +107,29 @@ char *build_ui_from_category(Category category)
 	char* xml_ui_definition;
 	xml_ui_definition = malloc(sizeof(char) * 10000);
 	xml_ui_definition[0] = '\0';
-	printf("xml ui definition starts out as %s\n", xml_ui_definition);
-	strcat(xml_ui_definition, "<interface>");
+	sprintf(xml_ui_definition, "\
+<interface>\n\
+ <object class=\"GtkBox\" id=\"main\">\n\
+  <property name=\"orientation\">vertical</property>\n\
+  <child>\n");
+	
 	for(int i=0; i < category.software_count; i++)
-	{	
-
-		//for maximum efficiency I'm trying to make as few of these calls as possible. This will result in long lines.
-		strcat(xml_ui_definition, "<object class='GtkBox' id=");
-		strcat(xml_ui_definition, category.software_list[i].id);
-		strcat(xml_ui_definition, "> <property name='orientation'>vertical</property><child><object class='GtkButton' id='button-");
-		strcat(xml_ui_definition, category.software_list[i].id);
-		strcat(xml_ui_definition,"'><property name='label'>Install</property></object>" );
-	}	
-	strcat(xml_ui_definition, "</interface>");
+	{
+		char temp_buffer[1000];
+		sprintf(temp_buffer, "\
+    <object class=\"GtkBox\" id=\"%s\">\n\
+     <property name=\"orientation\">vertical</property>\n\
+     <child>\n\
+      <object class=\"GtkBox\"></object>\n\
+     </child>\n\
+    </object>\n", category.software_list[i].id);
+		strcat(xml_ui_definition, temp_buffer);	
+	
+	}
+	strcat(xml_ui_definition, "\
+  </child>\n\
+ </object>\n\
+</interface>");
+	printf("xml ui def:\n%s\n", xml_ui_definition);
 	return xml_ui_definition;
-}
-
-int main()
-{
-	Category c = read_category_from_file("/home/null/jovarkos-software-recommendations/views/template.category");
-	char* xml = build_ui_from_category(c);
-	printf("%s", xml);
-	//I have no idea why, but this prints the full file before what I actually added to it
 }
