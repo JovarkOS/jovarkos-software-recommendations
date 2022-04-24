@@ -14,7 +14,7 @@ static void on_button_click(GtkWidget *widget, gpointer data)
 	Category category = read_category_from_file("views/template.category");
 	char* xml = build_ui_from_category(category); 
 	GtkBuilder* builder = gtk_builder_new_from_string(xml, -1);
-	GObject* main_box = gtk_builder_get_object(builder, "box");
+	GObject* main_box = gtk_builder_get_object(builder, "main");
 	gtk_widget_show(GTK_WIDGET(main_box));
 }
 
