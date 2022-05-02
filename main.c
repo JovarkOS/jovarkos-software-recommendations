@@ -15,7 +15,10 @@ static void on_button_click(GtkWidget *widget, gpointer data)
 	char* xml = build_ui_from_category(category); 
 	GtkBuilder* builder = gtk_builder_new_from_string(xml, -1);
 	GObject* main_box = gtk_builder_get_object(builder, "main");
-	gtk_widget_show(GTK_WIDGET(main_box));
+	gtk_box_set_spacing(GTK_BOX (main_box), 500);
+	gtk_container_remove(GTK_CONTAINER (window), category_container);
+	gtk_container_add(GTK_CONTAINER (window), GTK_WIDGET(main_box));
+	gtk_widget_show_all(GTK_WIDGET (window));
 }
 
 static void activate (GtkApplication *app, gpointer user_data)

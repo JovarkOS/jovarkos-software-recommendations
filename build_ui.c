@@ -65,7 +65,7 @@ Category read_category_from_file(const char *file_name)
 		break;
 
 		case '\n':
-		{	// extracts the value for each key and puts it in its appropriate slot in Software struct  but I have not yet implemented all keys
+		{	// extracts the value for each key and puts it in its appropriate slot in a Software struct
 			// long if else chain because c doesn't support char* in switch statements, and hash mapping is too hard
 			if (strcmp(key_string, "name") == 0 && parse_mode == VALUE)
 			{
@@ -98,7 +98,7 @@ Category read_category_from_file(const char *file_name)
 		}
 	} while (current_character != EOF);
 	to_return.software_count = software_count;
-	fclose(file);
+	fclose(file); 
 	return to_return;
 }
 
@@ -107,22 +107,35 @@ char *build_ui_from_category(Category category)
 	char* xml_ui_definition;
 	xml_ui_definition = malloc(sizeof(char) * 10000);
 	xml_ui_definition[0] = '\0';
+	//this isn't spacing properly and I have no idea why.
 	sprintf(xml_ui_definition, "\
 <interface>\n\
  <object class=\"GtkBox\" id=\"main\">\n\
-  <property name=\"orientation\">vertical</property>\n\
+  <property name=\"orientation\">horizontal</property>\n\
+  <property name=\"visible\">True</property>\n\
+  <property name=\"spacing\">500</property>\n\
   <child>\n");
 	
 	for(int i=0; i < category.software_count; i++)
 	{
 		char temp_buffer[1000];
 		sprintf(temp_buffer, "\
-    <object class=\"GtkBox\" id=\"%s\">\n\
-     <property name=\"orientation\">vertical</property>\n\
-     <child>\n\
-      <object class=\"GtkBox\"></object>\n\
+   <object class=\"GtkBox\" id=\"%s\">\n\
+    <property name=\"orientation\">vertical</property>\n\
+    <child>\n\
+     <object class=\"GtkTextBuffer\" id=\"title-%i\">\n\
+      <property name=\"text\"> hello world</property>\n\
+      </object>\n\
+       <object class=\"GtkTextView\">\n\
+        <property name=\"visible\">True</property>\n\
+        <property name=\"buffer\">title-%i</property>\n\
+       </object>\n\
+        <object class=\"GtkButton\" id=\"%s-button\">\n\
+        <property  name=\"label\">install %s</property>\n\
+        <property name=\"visible\">True</property>\n\
+       </object>\n\
      </child>\n\
-    </object>\n", category.software_list[i].id);
+    </object>\n", category.software_list[i].id, i, i,category.software_list[i].id,  category.software_list[i].name);
 		strcat(xml_ui_definition, temp_buffer);	
 	
 	}
