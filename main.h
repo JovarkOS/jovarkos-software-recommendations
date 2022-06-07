@@ -12,8 +12,19 @@ const char* category_names[] = {
     "Media",
     "Internet Messaging",
     "Development Software"
-     };
+};
+//paths for each category (MUST be synchronized)
+const char* category_paths[] = {
+	"browsers.category",
+    "texteditors.category",
+    "terminalemulators.category",
+    "media.category",
+    "messaging.category",
+    "development.category"
+};
+
 GtkWidget *category_container;
+GtkWidget* main_box;
 
 // Define the number of categories (find the number of elements)
 #define CATEGORY_NUMBER sizeof(category_names) / sizeof(category_names[0])

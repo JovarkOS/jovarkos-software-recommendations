@@ -1,11 +1,11 @@
 [firefox]
-name=firefox
+name=Firefox
 image_source=assets/firefox.png
 description=the firefox web browser
 package=firefox
 
 [chromium]
-name=chromium
+name=Chromium
 image_source=assets/chromium.png
-description=the chromium browser
+description=the chromium web browser, the open source base for google chrome
 package=chromium

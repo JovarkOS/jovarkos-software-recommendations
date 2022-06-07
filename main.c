@@ -1,22 +1,41 @@
 #include "build_ui.h"
 #include "main.h"
 
-static void hide_buttons()
+static void handle_back_button_click(GtkWidget *widget, gpointer data)
 {
-	gtk_widget_hide(category_container);
+	gtk_container_remove(GTK_CONTAINER (window), GTK_WIDGET(main_box));
+	gtk_container_add(GTK_CONTAINER (window), GTK_WIDGET(category_container));
 }
 
 static void on_button_click(GtkWidget *widget, gpointer data)
 {
 	// Hide the buttons from the view 
-	hide_buttons();
-	char path[50];
-	if(strcmp((char*) data, "Browsers") == 0)
+	char path[100];
+	char category_name[100];
+	for(int i = 0; i < CATEGORY_NUMBER; i++)
 	{
-		strncpy(path, "categories/browsers.category", sizeof(path));
+		if(strcmp(category_names[i],(char*) data) == 0)
+		{
+			strncpy(category_name, category_names[i], sizeof(category_name));
+			sprintf(path, "categories/%s", category_paths[i]);
+			break;
+		}
 	}
+	//create the main box that is then pushed to the screen
+	main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+	//the header that contains stuff like the the header name and a back button
+	GtkWidget* header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+	//setup back button
+	GtkWidget* back_button = gtk_button_new_with_label("Back");
+	g_signal_connect(back_button, "clicked",  G_CALLBACK(handle_back_button_click), NULL);
+	gtk_box_pack_start(GTK_BOX(header), GTK_WIDGET(back_button), 0, 0, 20);
+	
 	Category category = read_category_from_file(path);
-	GtkWidget* main_box = build_ui_from_category(category); 
+	GtkWidget* body = build_ui_from_category(category); 
+	
+	gtk_box_pack_start(GTK_BOX(main_box), header, 0, 0, 10);
+	gtk_box_pack_start(GTK_BOX(main_box), body, 0, 0, 10);
+	
 	gtk_container_remove(GTK_CONTAINER (window), category_container);
 	gtk_container_add(GTK_CONTAINER (window), GTK_WIDGET(main_box));
 	gtk_widget_show_all(GTK_WIDGET (window));
