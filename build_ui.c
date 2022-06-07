@@ -122,10 +122,12 @@ GtkWidget* build_ui_from_category(Category category)
 		char button_title[600];
 		sprintf(button_title, "install %s", category.software_list[i].name);
 		GtkWidget* install_button = gtk_button_new_with_label(button_title);
+		gtk_widget_set_size_request(GTK_WIDGET(install_button), 400, 30);
 		g_signal_connect(install_button, "clicked", G_CALLBACK(callback), (gpointer) &category.software_list[i]);
+		
 
 		//setup title
-		PangoFontDescription* title_font_desc = pango_font_description_from_string ("Serif 15");
+		PangoFontDescription* title_font_desc = pango_font_description_from_string ("Helvetica 15");
 		GtkWidget* title =  gtk_text_view_new();
 		GtkTextBuffer* title_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (title));
 		gtk_text_buffer_set_text(title_buffer, category.software_list[i].name, -1);
@@ -133,9 +135,13 @@ GtkWidget* build_ui_from_category(Category category)
 		pango_font_description_free (title_font_desc);
 		gtk_text_view_set_editable(GTK_TEXT_VIEW (title), FALSE);
 		gtk_text_view_set_justification(GTK_TEXT_VIEW(title), GTK_JUSTIFY_CENTER);
+		gtk_text_view_set_left_margin(GTK_TEXT_VIEW(title), 20);
+		gtk_text_view_set_right_margin(GTK_TEXT_VIEW(title), 20);
+		gtk_text_view_set_top_margin(GTK_TEXT_VIEW(title), 4);
+		gtk_widget_set_size_request(GTK_WIDGET(title), 400, 20);
 
 		//setup description
-		PangoFontDescription* description_font_desc = pango_font_description_from_string ("Serif 10");
+		PangoFontDescription* description_font_desc = pango_font_description_from_string ("Helvetica 10");
 		GtkWidget* description = gtk_text_view_new();
 		GtkTextBuffer* description_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (description));
 		gtk_text_buffer_set_text(description_buffer, category.software_list[i].description, -1);
@@ -143,10 +149,14 @@ GtkWidget* build_ui_from_category(Category category)
 		pango_font_description_free (description_font_desc);
 		gtk_text_view_set_editable(GTK_TEXT_VIEW (description), FALSE);
 		gtk_text_view_set_justification(GTK_TEXT_VIEW(description), GTK_JUSTIFY_CENTER);
+		gtk_text_view_set_left_margin(GTK_TEXT_VIEW(description), 20);
+		gtk_text_view_set_right_margin(GTK_TEXT_VIEW(description), 20);
+		gtk_text_view_set_top_margin(GTK_TEXT_VIEW(description), 8 );
+		gtk_widget_set_size_request(GTK_WIDGET(description), 400, 90);
 
 		//setup image
 		GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(category.software_list[i].image, NULL);
-		pixbuf = gdk_pixbuf_scale_simple(pixbuf, 640, 360, GDK_INTERP_BILINEAR);
+		pixbuf = gdk_pixbuf_scale_simple(pixbuf, 560, 315, GDK_INTERP_BILINEAR);
 		GtkWidget* image = gtk_image_new_from_pixbuf(pixbuf);
 		
 		//pac stuff into a box

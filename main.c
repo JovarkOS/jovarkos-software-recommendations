@@ -6,19 +6,38 @@ static void hide_buttons()
 	gtk_widget_hide(category_container);
 }
 
+static void handle_back_button_click(GtkWidget *widget, gpointer data)
+{
+	
+}
+
 static void on_button_click(GtkWidget *widget, gpointer data)
 {
 	// Hide the buttons from the view 
 	hide_buttons();
 	char path[50];
+	char category_name[100];
 	if(strcmp((char*) data, "Browsers") == 0)
 	{
 		strncpy(path, "categories/browsers.category", sizeof(path));
+		strncpy(category_name, "Browsers", sizeof(category_name));
 	}
+	if(strcmp((char*) data, "Browsers") == 0)
+	{
+		
+	}
+	//create the main box that is then pushed to the screen
+	GtkWidget* main = gtk_box_new(GTK_ORIENTATION_VERICAL, 0);
+	//the header that contains stuff like the the header name and a back button
+	GtkWidget* header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
 	Category category = read_category_from_file(path);
-	GtkWidget* main_box = build_ui_from_category(category); 
+	GtkWidget* body = build_ui_from_category(category); 
+	
+	gtk_box_pack_start(GTK_BOX(main), header, 0, 0, 10);
+	gtk_box_pack_start(GTK_BOX(main), body, 0, 0, 10);
+	
 	gtk_container_remove(GTK_CONTAINER (window), category_container);
-	gtk_container_add(GTK_CONTAINER (window), GTK_WIDGET(main_box));
+	gtk_container_add(GTK_CONTAINER (window), GTK_WIDGET(main));
 	gtk_widget_show_all(GTK_WIDGET (window));
 }
 
