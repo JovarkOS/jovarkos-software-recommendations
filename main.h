@@ -23,7 +23,7 @@ const char* category_paths[] = {
     "development.category"
 };
 
-GtkWidget *category_container;
+GtkWidget* category_container;
 GtkWidget* main_box;
 
 // Define the number of categories (find the number of elements)
@@ -31,7 +31,7 @@ GtkWidget* main_box;
 
 GtkWidget *window;
 GtkWidget *category_buttons[CATEGORY_NUMBER];
-
-static void hide_buttons();
-static void on_button_click();
+static void handle_back_button_click(GtkWidget *widget, gpointer data);
+static void on_button_click(GtkWidget *widget, gpointer data);
 static void activate(GtkApplication *app, gpointer user_data);
+static void create_buttons();
