@@ -104,17 +104,19 @@ Category read_category_from_file(const char *file_name)
 
 void callback(GtkWidget *widget, gpointer data)
 {	
-	printf("this software's package name  is %s\n", ((Software *) data)->package);
+	char install_command[500];
+	sprintf(install_command, "yes | pkexec pacman -S  %s\n", ((Software *) data)->package);
+	int status = system(install_command);
 }
 
 GtkWidget* build_ui_from_category(Category category)
 {
-	GtkWidget* category_main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+	GtkWidget* category_main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
 	
 	for(int i = 0; i < category.software_count; i++)
 	{	
 		
-		GtkWidget* main_software_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 4);
+		GtkWidget* main_software_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
 		
 		//setup install button
 		char button_title[600];
@@ -123,17 +125,36 @@ GtkWidget* build_ui_from_category(Category category)
 		g_signal_connect(install_button, "clicked", G_CALLBACK(callback), (gpointer) &category.software_list[i]);
 
 		//setup title
-		PangoFontDescription* font_desc = pango_font_description_from_string ("Serif 15");
+		PangoFontDescription* title_font_desc = pango_font_description_from_string ("Serif 15");
 		GtkWidget* title =  gtk_text_view_new();
 		GtkTextBuffer* title_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (title));
 		gtk_text_buffer_set_text(title_buffer, category.software_list[i].name, -1);
-		gtk_widget_override_font (title, font_desc);
-		pango_font_description_free (font_desc);
+		gtk_widget_override_font (title, title_font_desc);
+		pango_font_description_free (title_font_desc);
 		gtk_text_view_set_editable(GTK_TEXT_VIEW (title), FALSE);
 		gtk_text_view_set_justification(GTK_TEXT_VIEW(title), GTK_JUSTIFY_CENTER);
-		gtk_box_pack_start(GTK_BOX(main_software_box), GTK_WIDGET(title), 0, 0, 3);
-		gtk_box_pack_start(GTK_BOX(main_software_box), GTK_WIDGET(install_button), 0, 0, 3);
-		gtk_box_pack_start(GTK_BOX(category_main_box), GTK_WIDGET(main_software_box), 0, 0, 3);
+
+		//setup description
+		PangoFontDescription* description_font_desc = pango_font_description_from_string ("Serif 10");
+		GtkWidget* description = gtk_text_view_new();
+		GtkTextBuffer* description_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (description));
+		gtk_text_buffer_set_text(description_buffer, category.software_list[i].description, -1);
+		gtk_widget_override_font (description, description_font_desc);
+		pango_font_description_free (description_font_desc);
+		gtk_text_view_set_editable(GTK_TEXT_VIEW (description), FALSE);
+		gtk_text_view_set_justification(GTK_TEXT_VIEW(description), GTK_JUSTIFY_CENTER);
+
+		//setup image
+		GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(category.software_list[i].image, NULL);
+		pixbuf = gdk_pixbuf_scale_simple(pixbuf, 640, 360, GDK_INTERP_BILINEAR);
+		GtkWidget* image = gtk_image_new_from_pixbuf(pixbuf);
+		
+		//pac stuff into a box
+		gtk_box_pack_start(GTK_BOX(main_software_box), GTK_WIDGET(title), 0, 0, 1);
+		gtk_box_pack_start(GTK_BOX(main_software_box), GTK_WIDGET(image), 0, 0, 1);
+		gtk_box_pack_start(GTK_BOX(main_software_box), GTK_WIDGET(description), 0, 0, 1);
+		gtk_box_pack_start(GTK_BOX(main_software_box), GTK_WIDGET(install_button), 0, 0, 1);
+		gtk_box_pack_start(GTK_BOX(category_main_box), GTK_WIDGET(main_software_box), 0, 0, 1);
 	}
 	return category_main_box;
 }
