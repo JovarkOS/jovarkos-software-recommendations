@@ -52,7 +52,7 @@ Category read_category_from_file(const char *file_name)
 			}
 		}
 		break;
-		// switches between key and value mode while erasin the buffer
+		// switches between key and value mode while erasing the buffer
 		case '=':
 		{
 			if (parse_mode == KEY)
@@ -102,52 +102,59 @@ Category read_category_from_file(const char *file_name)
 	return to_return;
 }
 
-char *build_ui_from_category(Category category)
+void callback(GtkWidget *widget, gpointer data)
+{	
+	char install_command[500];
+	sprintf(install_command, "yes | pkexec pacman -S  %s\n", ((Software *) data)->package);
+	int status = system(install_command);
+}
+
+GtkWidget* build_ui_from_category(Category category)
 {
-	char* xml_ui_definition;
-	xml_ui_definition = malloc(sizeof(char) * 10000);
-	xml_ui_definition[0] = '\0';
-	//this isn't spacing properly and I have no idea why.
-	sprintf(xml_ui_definition, "\
-<interface>\n\
- <object class=\"GtkBox\" id=\"main\">\n\
-  <property name=\"orientation\">vertical</property>\n\
-  <property name=\"visible\">True</property>\n\
-  <property name=\"spacing\">200</property>\n\
-  <child>\n");
+	GtkWidget* category_main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 10);
 	
-	for(int i=0; i < category.software_count; i++)
-	{
-		char temp_buffer[1000];
-		sprintf(temp_buffer, "\
-   <object class=\"GtkBox\" id=\"%s\">\n\
-    <property name=\"orientation\">vertical</property>\n\
-    <child>\n\
-     <object class=\"GtkTextBuffer\" id=\"title-%i\">\n\
-      <property name=\"text\"> hello world</property>\n\
-      </object>\n\
-       <object class=\"GtkTextView\">\n\
-        <property name=\"visible\">True</property>\n\
-        <property name=\"buffer\">title-%i</property>\n\
-       </object>\n\
-        <object class=\"GtkButton\" id=\"%s-button\">\n\
-        <property  name=\"label\">install %s</property>\n\
-        <property name=\"visible\">True</property>\n\
-       </object>\n\
-     </child>\n\
-    </object>\n\
-   <packing>\n\
-    <property name=\"expand\">False</property>\n\
-    <property name=\"fill\">True</property>\n\
-    <property name=\"position\">0</property>\n\
-   </packing>", category.software_list[i].id, i, i,category.software_list[i].id,  category.software_list[i].name);
-		strcat(xml_ui_definition, temp_buffer);	
-	
+	for(int i = 0; i < category.software_count; i++)
+	{	
+		
+		GtkWidget* main_software_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
+		
+		//setup install button
+		char button_title[600];
+		sprintf(button_title, "install %s", category.software_list[i].name);
+		GtkWidget* install_button = gtk_button_new_with_label(button_title);
+		g_signal_connect(install_button, "clicked", G_CALLBACK(callback), (gpointer) &category.software_list[i]);
+
+		//setup title
+		PangoFontDescription* title_font_desc = pango_font_description_from_string ("Serif 15");
+		GtkWidget* title =  gtk_text_view_new();
+		GtkTextBuffer* title_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (title));
+		gtk_text_buffer_set_text(title_buffer, category.software_list[i].name, -1);
+		gtk_widget_override_font (title, title_font_desc);
+		pango_font_description_free (title_font_desc);
+		gtk_text_view_set_editable(GTK_TEXT_VIEW (title), FALSE);
+		gtk_text_view_set_justification(GTK_TEXT_VIEW(title), GTK_JUSTIFY_CENTER);
+
+		//setup description
+		PangoFontDescription* description_font_desc = pango_font_description_from_string ("Serif 10");
+		GtkWidget* description = gtk_text_view_new();
+		GtkTextBuffer* description_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (description));
+		gtk_text_buffer_set_text(description_buffer, category.software_list[i].description, -1);
+		gtk_widget_override_font (description, description_font_desc);
+		pango_font_description_free (description_font_desc);
+		gtk_text_view_set_editable(GTK_TEXT_VIEW (description), FALSE);
+		gtk_text_view_set_justification(GTK_TEXT_VIEW(description), GTK_JUSTIFY_CENTER);
+
+		//setup image
+		GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(category.software_list[i].image, NULL);
+		pixbuf = gdk_pixbuf_scale_simple(pixbuf, 640, 360, GDK_INTERP_BILINEAR);
+		GtkWidget* image = gtk_image_new_from_pixbuf(pixbuf);
+		
+		//pac stuff into a box
+		gtk_box_pack_start(GTK_BOX(main_software_box), GTK_WIDGET(title), 0, 0, 1);
+		gtk_box_pack_start(GTK_BOX(main_software_box), GTK_WIDGET(image), 0, 0, 1);
+		gtk_box_pack_start(GTK_BOX(main_software_box), GTK_WIDGET(description), 0, 0, 1);
+		gtk_box_pack_start(GTK_BOX(main_software_box), GTK_WIDGET(install_button), 0, 0, 1);
+		gtk_box_pack_start(GTK_BOX(category_main_box), GTK_WIDGET(main_software_box), 0, 0, 1);
 	}
-	strcat(xml_ui_definition, "\
-  </child>\n\
- </object>\n\
-</interface>");
-	printf("xml ui def:\n%s\n", xml_ui_definition);
-	return xml_ui_definition;
+	return category_main_box;
 }
