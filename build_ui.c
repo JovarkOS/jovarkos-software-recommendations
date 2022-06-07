@@ -156,7 +156,7 @@ GtkWidget* build_ui_from_category(Category category)
 
 		//setup image
 		GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(category.software_list[i].image, NULL);
-		pixbuf = gdk_pixbuf_scale_simple(pixbuf, 560, 315, GDK_INTERP_BILINEAR);
+		pixbuf = gdk_pixbuf_scale_simple(pixbuf, IMAGE_RESOLUTION_X, IMAGE_RESOLUTION_Y, GDK_INTERP_BILINEAR);
 		GtkWidget* image = gtk_image_new_from_pixbuf(pixbuf);
 		
 		//pac stuff into a box

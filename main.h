@@ -29,7 +29,8 @@ GtkWidget* main_box;
 // Define the number of categories (find the number of elements)
 #define CATEGORY_NUMBER sizeof(category_names) / sizeof(category_names[0])
 
-GtkWidget *window;
+GtkWidget* window;
+GtkWidget* scrolled;
 GtkWidget *category_buttons[CATEGORY_NUMBER];
 static void handle_back_button_click(GtkWidget *widget, gpointer data);
 static void on_button_click(GtkWidget *widget, gpointer data);

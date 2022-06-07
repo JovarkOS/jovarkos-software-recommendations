@@ -11,14 +11,15 @@ static void create_buttons()
 		  	g_signal_connect(category_buttons[i], "clicked", G_CALLBACK(on_button_click), (gpointer) category_names[i]);
 	  }
 	  
+	  
 	  gtk_box_set_spacing(GTK_BOX(category_container), 2);
-	  gtk_container_add (GTK_CONTAINER (window), category_container);
+	  gtk_container_add (GTK_CONTAINER (scrolled), category_container);
 	  gtk_widget_show_all (GTK_WIDGET (window));
 }
 
 static void handle_back_button_click(GtkWidget *widget, gpointer data)
 {
-	gtk_container_remove(GTK_CONTAINER (window), main_box);
+	gtk_container_remove(GTK_CONTAINER (scrolled), main_box);
 	create_buttons();
 
 }
@@ -51,19 +52,22 @@ static void on_button_click(GtkWidget *widget, gpointer data)
 	
 	gtk_box_pack_start(GTK_BOX(main_box), header, 0, 0, 10);
 	gtk_box_pack_start(GTK_BOX(main_box), body, 0, 0, 10);
-	
-	gtk_container_remove(GTK_CONTAINER (window), category_container);
-	gtk_container_add(GTK_CONTAINER (window), main_box);
+
+	gtk_container_remove(GTK_CONTAINER (scrolled), category_container);
+	gtk_container_add(GTK_CONTAINER (scrolled), main_box);
 	gtk_widget_show_all(GTK_WIDGET (window));
 }
 
 static void activate (GtkApplication *app, gpointer user_data)
 {
 	  // prepare the window
-	  window = gtk_application_window_new (app);
+	  window = gtk_application_window_new( GTK_APPLICATION ( app ) );
 	  gtk_window_set_title (GTK_WINDOW (window), "JovarkOS Software Recommendations");
 	  gtk_window_set_icon_from_file(GTK_WINDOW(window), "assets/window-icon.png", NULL);
 	  gtk_window_set_default_size (GTK_WINDOW (window), 640, 480);
+
+	  scrolled = gtk_scrolled_window_new(NULL, NULL);
+	  gtk_container_add(GTK_CONTAINER (window), scrolled);
 
 	  //make buttons
 	  create_buttons();
