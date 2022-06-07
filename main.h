@@ -1,3 +1,7 @@
+#ifndef GTK
+#include "gtk/gtk.h"
+#define GTK
+#endif
 #define BUTTON_PADDING 3
 
 // Define list of category names found in SOFTWARE.ini

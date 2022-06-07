@@ -1,0 +1,11 @@
+[firefox]
+name=firefox
+image_source=assets/firefox.png
+description=the firefox web browser
+package=firefox
+
+[chromium]
+name=chromium
+image_source=assets/chromium.png
+description=the chromium browser
+package=chromium
