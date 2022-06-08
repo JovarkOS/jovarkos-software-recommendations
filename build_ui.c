@@ -113,14 +113,18 @@ char *build_ui_from_category(Category category)
  <object class=\"GtkBox\" id=\"main\">\n\
   <property name=\"orientation\">vertical</property>\n\
   <property name=\"visible\">True</property>\n\
-  <property name=\"spacing\">200</property>\n\
+  <property name=\"spacing\">10</property>\n\
+  <property name=\"margin-start\">5</property>\n\
+  <property name=\"margin-top\">6</property>\n\
+  <property name=\"margin-bottom\">10</property>\n\
+  <property name=\"orientation\">vertical</property>\n\
   <child>\n");
 	
 	for(int i=0; i < category.software_count; i++)
 	{
 		char temp_buffer[1000];
 		sprintf(temp_buffer, "\
-   <object class=\"GtkBox\" id=\"%s\">\n\
+   <object class=\"GtkBox\" id=\"%s\">\n\ 
     <property name=\"orientation\">vertical</property>\n\
     <child>\n\
      <object class=\"GtkTextBuffer\" id=\"title-%i\">\n\
@@ -132,22 +136,25 @@ char *build_ui_from_category(Category category)
        </object>\n\
         <object class=\"GtkButton\" id=\"%s-button\">\n\
         <property  name=\"label\">install %s</property>\n\
+        <property name=\"valign\">start</property>\n\
         <property name=\"visible\">True</property>\n\
        </object>\n\
      </child>\n\
-    </object>\n\
-   <packing>\n\
-    <property name=\"expand\">False</property>\n\
-    <property name=\"fill\">True</property>\n\
-    <property name=\"position\">0</property>\n\
-   </packing>", category.software_list[i].id, i, i,category.software_list[i].id,  category.software_list[i].name);
+   </object>\n\
+  ", category.software_list[i].id, i, i,category.software_list[i].id,  category.software_list[i].name, i);
 		strcat(xml_ui_definition, temp_buffer);	
 	
 	}
 	strcat(xml_ui_definition, "\
+   <packing>\n\
+	<property name=\"expand\">False</property>\n\
+	<property name=\"fill\">True</property>\n\ 
+	<property name=\"position\">0</property>\n\
+	<property name=\"pack-type\">start</property>\n\
+   </packing>\n\
   </child>\n\
  </object>\n\
-</interface>");
+</interface>\n");
 	printf("xml ui def:\n%s\n", xml_ui_definition);
 	return xml_ui_definition;
 }
