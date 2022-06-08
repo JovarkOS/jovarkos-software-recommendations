@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+
+// TODO: refactor and clean up code - change variable names & reduce loc where possible
+
 void append_char(char str[], char c)
 {
 	char arr[2] = {c, '\0'};
@@ -11,12 +14,9 @@ void append_char(char str[], char c)
 
 Category read_category_from_file(const char *file_name)
 {
-	// this code is a mess, maybe somebody with time and more c knowledge than I do can refactor it somewhat.
-	// idk if that's possible tho.
-	// please change variable names. if you can reduce loc or make it less complex do that as well
 	Software *software_list;
 	Category to_return = {software_list, "template"};
-	to_return.software_list = malloc(sizeof(Software) * 100); // Idk why I'm mallocing here. call it future proofing.
+	to_return.software_list = malloc(sizeof(Software) * 100); // malloc for future-proofing
 	FILE *file;
 	char current_string[100000];
 	char key_string[500];
@@ -32,23 +32,24 @@ Category read_category_from_file(const char *file_name)
 	}
 	do
 	{
-		// essentially right here we grab a character from the file, and either write it to a buffer or take it as a control char.
+		// takes char from the file and writes to a buffer or takes as a control char
 		current_character = fgetc(file);
 		switch (current_character)
-		{ // this defined a header/id section
+		{ 
+		// define a header/id section
 		case '[':
 			parse_mode = ID;
 			software_count++;
 			break;
 		case ']':
 		{
-			// this gets the id of the element or smth, idk, I'm sleep deprived
+			// Gets the ID of the element
 			if (parse_mode == ID)
 			{
 
 				strncpy(to_return.software_list[software_count - 1].id, current_string, sizeof(to_return.software_list[0].id));
 				parse_mode = KEY;
-				current_string[0] = '\0';
+				current_string[0] = '\0'; // sets zero length empty string
 			}
 		}
 		break;
@@ -59,14 +60,15 @@ Category read_category_from_file(const char *file_name)
 			{
 				strncpy(key_string, current_string, sizeof(key_string));
 				parse_mode = VALUE;
-				current_string[0] = '\0'; // yes this is how you 'erase' a string in c
+				current_string[0] = '\0'; // sets zero length empty string
 			}
 		}
 		break;
 
+		// extracts the value for each key and puts it in its appropriate slot in a Software struct
+		// long if else chain because c doesn't support char* in switch statements
 		case '\n':
-		{	// extracts the value for each key and puts it in its appropriate slot in a Software struct
-			// long if else chain because c doesn't support char* in switch statements, and hash mapping is too hard
+		{	
 			if (strcmp(key_string, "name") == 0 && parse_mode == VALUE)
 			{
 				strncpy(to_return.software_list[software_count - 1].name, current_string, sizeof(to_return.software_list[0].name));
@@ -92,11 +94,12 @@ Category read_category_from_file(const char *file_name)
 		default:
 		{
 			if (parse_mode != NONE)
-				append_char(current_string, (char)current_character); // feeds chars to the buffer
+			append_char(current_string, (char)current_character); // feeds chars to the buffer
 		}
 		break;
 		}
-	} while (current_character != EOF);
+	} 
+	while (current_character != EOF);
 	to_return.software_count = software_count;
 	fclose(file); 
 	return to_return;
@@ -105,7 +108,7 @@ Category read_category_from_file(const char *file_name)
 void callback(GtkWidget *widget, gpointer data)
 {	
 	char install_command[500];
-	sprintf(install_command, "yes | pkexec pacman -S  %s\n", ((Software *) data)->package);
+	sprintf(install_command, "pkexec pacman -S --noconfirm %s\n", ((Software *) data)->package);
 	int status = system(install_command);
 }
 
@@ -115,7 +118,6 @@ GtkWidget* build_ui_from_category(Category category)
 	
 	for(int i = 0; i < category.software_count; i++)
 	{	
-		
 		GtkWidget* main_software_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
 		
 		//setup install button
