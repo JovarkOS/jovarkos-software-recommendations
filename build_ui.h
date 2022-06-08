@@ -1,3 +1,9 @@
+#ifndef GTK
+#include "gtk/gtk.h"
+#define GTK
+#endif
+#define IMAGE_RESOLUTION_X 480
+#define IMAGE_RESOLUTION_Y 270
 typedef struct {
 	char id[50];
 	char package[200];
@@ -13,6 +19,7 @@ typedef struct {
 } Category;
 
 Category read_category_from_file(const char* fileName);
-char* build_ui_from_category(Category c);
+GtkWidget*  build_ui_from_category(Category c);
 typedef enum { ID, KEY, VALUE, NONE } Mode;
+void callback(GtkWidget *widget, gpointer data );
 
