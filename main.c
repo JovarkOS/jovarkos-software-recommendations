@@ -40,13 +40,31 @@ static void on_button_click(GtkWidget *widget, gpointer data)
 	}
 	//create the main box that is then pushed to the screen
 	main_box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+
 	//the header that contains stuff like the the header name and a back button
 	GtkWidget* header = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+
 	//setup back button
 	GtkWidget* back_button = gtk_button_new_with_label("Back");
 	g_signal_connect(back_button, "clicked",  G_CALLBACK(handle_back_button_click), NULL);
 	gtk_box_pack_start(GTK_BOX(header), GTK_WIDGET(back_button), 0, 0, 20);
-	
+
+	//setup category title
+	PangoFontDescription* font_desc = pango_font_description_from_string ("Helvetica 12");
+	GtkWidget* title_view =  gtk_text_view_new();
+	GtkTextBuffer* title_view_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (title_view));
+	gtk_text_buffer_set_text(title_view_buffer, category_name, -1);
+	gtk_widget_override_font (title_view, font_desc);
+	pango_font_description_free (font_desc);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW (title_view), FALSE);
+	gtk_text_view_set_justification(GTK_TEXT_VIEW(title_view), GTK_JUSTIFY_CENTER);
+	gtk_text_view_set_left_margin(GTK_TEXT_VIEW(title_view), 20);
+	gtk_text_view_set_right_margin(GTK_TEXT_VIEW(title_view), 20);
+	gtk_text_view_set_top_margin(GTK_TEXT_VIEW(title_view), 8);
+	gtk_widget_set_size_request(GTK_WIDGET(title_view), 400, 20);
+	gtk_box_pack_start(GTK_BOX (header), GTK_WIDGET (title_view), 0, 0, 20);
+
+	 	
 	Category category = read_category_from_file(path);
 	GtkWidget* body = build_ui_from_category(category); 
 	
