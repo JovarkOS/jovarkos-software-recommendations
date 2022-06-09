@@ -74,7 +74,7 @@ Category read_category_from_file(const char *file_name)
 				strncpy(to_return.software_list[software_count - 1].name, current_string, sizeof(to_return.software_list[0].name));
 			}
 
-			else if (strcmp(key_string, "image_source") == 0 && parse_mode == VALUE)
+			else if (strcmp(key_string, "image") == 0 && parse_mode == VALUE)
 			{
 				strncpy(to_return.software_list[software_count - 1].image, current_string, sizeof(to_return.software_list[0].image));
 			}
@@ -108,8 +108,23 @@ Category read_category_from_file(const char *file_name)
 void callback(GtkWidget *widget, gpointer data)
 {	
 	char install_command[500];
+	char output[1000];
 	sprintf(install_command, "pkexec pacman -S --noconfirm %s\n", ((Software *) data)->package);
-	int status = system(install_command);
+	FILE *command_output;
+	command_output= popen(install_command, "r");
+	if (command_output == NULL) 
+	{
+    	printf("Failed to run command\n" );
+    	exit(1);
+  	}
+
+  /* Read the output a line at a time - output it. */
+  while (fgets(output, sizeof(output), command_output) != NULL) {
+    printf("line: %s", output);
+  }
+
+  /* close */
+  pclose(command_output);
 }
 
 GtkWidget* build_ui_from_category(Category category)

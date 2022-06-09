@@ -10,8 +10,10 @@ const char* category_names[] = {
     "Text Editors",
     "Terminal Emulators",
     "Media",
-    "Internet Messaging",
-    "Development Software"
+    "Communication",
+    "Development Software",
+    "Utilities",
+    "Gaming"
 };
 //paths for each category (MUST be synchronized)
 const char* category_paths[] = {
@@ -19,8 +21,10 @@ const char* category_paths[] = {
     "texteditors.category",
     "terminalemulators.category",
     "media.category",
-    "messaging.category",
-    "development.category"
+    "communication.category",
+    "development.category",
+    "utities.category",
+    "gaming.category"
 };
 
 GtkWidget* category_container;
