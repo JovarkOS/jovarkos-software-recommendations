@@ -1,0 +1,5 @@
+[steam]
+name=Steam
+image=assets/steam.jpg
+package=steam
+description=Valve's hugely popular game store and launcher.

@@ -1,0 +1,10 @@
+[alacritty]
+name=Alacritty
+image=assets/alacritty.png
+package=alacritty
+description=Hardware accelerated highly customizable terminal.
+
+[xfce4-terminal]
+name=Xfce Terminal
+image=assets/xfce4-terminal.png
+description=Simple, customizable, terminal. Designed for XFCE, but great anywhere.
