@@ -3,8 +3,24 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
+#include <math.h>
 
 // TODO: refactor and clean up code - change variable names & reduce loc where possible
+
+char* autobreak_text(char* text, int line_length)
+{
+	char* broken_text = malloc(strlen(text) * sizeof(char) + (size_t) floor(sizeof(text) / line_length));
+	int lines = 1;
+	for(int i = 0; i < (int) strlen(text); i++)
+	{	
+		if(i >= lines * line_length && text[i] == ' ') { lines++; broken_text[i] = '\n'; }
+		else
+		{
+			broken_text[i] = text[i];
+		}
+	}
+	return broken_text;
+}
 
 void append_char(char str[], char c)
 {
@@ -161,7 +177,7 @@ GtkWidget* build_ui_from_category(Category category)
 		PangoFontDescription* description_font_desc = pango_font_description_from_string ("Helvetica 10");
 		GtkWidget* description = gtk_text_view_new();
 		GtkTextBuffer* description_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (description));
-		gtk_text_buffer_set_text(description_buffer, category.software_list[i].description, -1);
+		gtk_text_buffer_set_text(description_buffer, autobreak_text(category.software_list[i].description, 40), -1);
 		gtk_widget_override_font (description, description_font_desc);
 		pango_font_description_free (description_font_desc);
 		gtk_text_view_set_editable(GTK_TEXT_VIEW (description), FALSE);
