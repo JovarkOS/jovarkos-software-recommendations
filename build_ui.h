@@ -4,6 +4,7 @@
 #endif
 #define IMAGE_RESOLUTION_X 480
 #define IMAGE_RESOLUTION_Y 270
+#define DESCRIPTION_LINE_LENGTH 80
 typedef struct {
 	char id[50];
 	char package[200];

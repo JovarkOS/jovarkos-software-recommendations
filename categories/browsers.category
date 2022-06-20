@@ -7,5 +7,5 @@ package=firefox
 [chromium]
 name=Chromium
 image=assets/chromium.jpg
-description=the chromium web browser, the open source base for google chrome
+description=Chromium is a free and open-source web browser project, principally developed and maintained by Google. This codebase provides the vast majority of code for the Google Chrome browser, which is proprietary software and has some additional features. The Chromium codebase is widely used. Microsoft Edge, Samsung Internet, Opera, and many other browsers are based on the code. Moreover, significant portions of the code are used by several app frameworks.
 package=chromium

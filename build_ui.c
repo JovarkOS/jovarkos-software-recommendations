@@ -9,7 +9,7 @@
 
 char* autobreak_text(char* text, int line_length)
 {
-	char* broken_text = malloc(strlen(text) * sizeof(char) + (size_t) floor(sizeof(text) / line_length));
+	char* broken_text = malloc(strlen(text) * sizeof(char) + (size_t) round(sizeof(text) / line_length));
 	int lines = 1;
 	for(int i = 0; i < (int) strlen(text); i++)
 	{	
@@ -161,7 +161,7 @@ GtkWidget* build_ui_from_category(Category category)
 
 		//setup title
 		PangoFontDescription* title_font_desc = pango_font_description_from_string ("Helvetica 15");
-		GtkWidget* title =  gtk_text_view_new();
+		GtkWidget* title = gtk_text_view_new();
 		GtkTextBuffer* title_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (title));
 		gtk_text_buffer_set_text(title_buffer, category.software_list[i].name, -1);
 		gtk_widget_override_font (title, title_font_desc);
@@ -171,13 +171,14 @@ GtkWidget* build_ui_from_category(Category category)
 		gtk_text_view_set_left_margin(GTK_TEXT_VIEW(title), 20);
 		gtk_text_view_set_right_margin(GTK_TEXT_VIEW(title), 20);
 		gtk_text_view_set_top_margin(GTK_TEXT_VIEW(title), 4);
+		gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(title), FALSE);
 		gtk_widget_set_size_request(GTK_WIDGET(title), 400, 20);
 
 		//setup description
 		PangoFontDescription* description_font_desc = pango_font_description_from_string ("Helvetica 10");
 		GtkWidget* description = gtk_text_view_new();
 		GtkTextBuffer* description_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (description));
-		gtk_text_buffer_set_text(description_buffer, autobreak_text(category.software_list[i].description, 40), -1);
+		gtk_text_buffer_set_text(description_buffer, autobreak_text(category.software_list[i].description, DESCRIPTION_LINE_LENGTH), -1);
 		gtk_widget_override_font (description, description_font_desc);
 		pango_font_description_free (description_font_desc);
 		gtk_text_view_set_editable(GTK_TEXT_VIEW (description), FALSE);
@@ -185,7 +186,12 @@ GtkWidget* build_ui_from_category(Category category)
 		gtk_text_view_set_left_margin(GTK_TEXT_VIEW(description), 20);
 		gtk_text_view_set_right_margin(GTK_TEXT_VIEW(description), 20);
 		gtk_text_view_set_top_margin(GTK_TEXT_VIEW(description), 8 );
+		gtk_text_view_set_bottom_margin(GTK_TEXT_VIEW(description), 8);
+		gtk_text_view_set_pixels_inside_wrap(GTK_TEXT_VIEW(description), 8);
+		gtk_text_view_set_pixels_below_lines(GTK_TEXT_VIEW(description), 8);
+		gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(description), FALSE);
 		gtk_widget_set_size_request(GTK_WIDGET(description), 400, 90);
+		
 
 		//setup image
 		GdkPixbuf* pixbuf = gdk_pixbuf_new_from_file(category.software_list[i].image, NULL);
